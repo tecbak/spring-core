@@ -2,16 +2,22 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-    <bean id="eventLogger" class="ua.rud.loggers.ConsoleEventLogger"/>
+
+    <bean id="consoleEventLogger" class="ua.rud.loggers.ConsoleEventLogger"/>
+
+    <bean id="fileEventLogger" class="ua.rud.loggers.FileEventLogger" init-method="init">
+        <constructor-arg value="log.txt"/>
+    </bean>
+
+    <bean id="cacheFileEventLogger" class="ua.rud.loggers.CacheFileEventLogger" init-method="init" destroy-method="destroy">
+        <constructor-arg value="cache-log.txt"/>
+        <constructor-arg value="3"/>
+    </bean>
+
 
     <bean id="client" class="ua.rud.beans.Client">
         <constructor-arg value="1"/>
         <constructor-arg value="John Smith"/>
-    </bean>
-
-    <bean id="app" class="ua.rud.App">
-        <constructor-arg ref="client"/>
-        <constructor-arg ref="eventLogger"/>
     </bean>
 
     <bean id="event" class="ua.rud.beans.Event" scope="prototype">
@@ -22,4 +28,10 @@
             <bean class="java.text.DateFormat" factory-method="getDateTimeInstance"/>
         </constructor-arg>
     </bean>
+
+    <bean id="app" class="ua.rud.App">
+        <constructor-arg ref="client"/>
+        <constructor-arg ref="cacheFileEventLogger"/>
+    </bean>
+
 </beans>
