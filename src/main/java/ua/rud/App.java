@@ -1,14 +1,13 @@
 package ua.rud;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ua.rud.beans.Client;
 import ua.rud.loggers.EventLogger;
 
 public class App {
     private Client client;
     private EventLogger eventLogger;
-
-    public App() {
-    }
 
     public App(Client client, EventLogger eventLogger) {
         this.client = client;
@@ -21,7 +20,9 @@ public class App {
     }
 
     public static void main(String[] args) {
-        App app = new App();
+        ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+
+        App app = context.getBean("app", App.class);
 
         app.logEvent("Some event for user 1");
     }
