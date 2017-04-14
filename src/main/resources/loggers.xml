@@ -14,4 +14,12 @@
         <constructor-arg value="3"/>
     </bean>
 
+    <bean id="combinedEventLogger" class="ua.rud.loggers.CombinedEventLogger">
+        <constructor-arg>
+            <list>
+                <ref bean="consoleEventLogger"/>
+                <ref bean="fileEventLogger"/>
+            </list>
+        </constructor-arg>
+    </bean>
 </beans>

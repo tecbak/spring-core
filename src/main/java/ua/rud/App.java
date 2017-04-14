@@ -1,25 +1,35 @@
 package ua.rud;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ua.rud.beans.Client;
 import ua.rud.beans.Event;
 import ua.rud.loggers.EventLogger;
+import ua.rud.loggers.EventType;
+
+import java.util.Map;
+
+import static ua.rud.loggers.EventType.*;
 
 public class App {
     private Client client;
-    private EventLogger eventLogger;
+    private EventLogger defaultLogger;
+    private Map<EventType, EventLogger> loggers;
 
-    public App(Client client, EventLogger eventLogger) {
+    public App(Client client, EventLogger defaultLogger, Map<EventType, EventLogger> loggers) {
         this.client = client;
-        this.eventLogger = eventLogger;
+        this.defaultLogger = defaultLogger;
+        this.loggers = loggers;
     }
 
-    public void logEvent(Event event) {
+    public void logEvent(Event event, EventType type) {
+        EventLogger logger = loggers.get(type);
+        if (logger == null) {
+            logger = defaultLogger;
+        }
         String message = event.getMessage();
         event.setMessage(message.replaceAll(client.getId(), client.getFullName()));
-        eventLogger.logEvent(event);
+        logger.logEvent(event);
     }
 
     public static void main(String[] args) {
@@ -29,7 +39,9 @@ public class App {
         Event event = context.getBean("event", Event.class);
         event.setMessage("Some event for user 1\n");
 
-        app.logEvent(event);
+        app.logEvent(event, INFO);
+        app.logEvent(event, ERROR);
+        app.logEvent(event, null);
 
         context.close();
     }
