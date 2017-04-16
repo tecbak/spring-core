@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <bean id="consoleEventLogger" class="ua.rud.loggers.ConsoleEventLogger"/>
-
-    <bean id="fileEventLogger" class="ua.rud.loggers.FileEventLogger" init-method="init">
-        <constructor-arg value="log.txt"/>
-    </bean>
-
-    <bean id="cacheFileEventLogger" class="ua.rud.loggers.CacheFileEventLogger" parent="fileEventLogger"
-          destroy-method="destroy">
-        <constructor-arg value="3"/>
-    </bean>
+    <context:component-scan base-package="ua.rud.loggers"/>
 
     <bean id="combinedEventLogger" class="ua.rud.loggers.CombinedEventLogger">
         <constructor-arg>

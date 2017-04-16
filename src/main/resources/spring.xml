@@ -6,16 +6,7 @@
 
     <context:annotation-config/>
 
-    <context:component-scan base-package="ua.rud.loggers"/>
-    <bean id="combinedEventLogger" class="ua.rud.loggers.CombinedEventLogger">
-        <constructor-arg>
-            <list>
-                <ref bean="consoleEventLogger"/>
-                <ref bean="fileEventLogger"/>
-            </list>
-        </constructor-arg>
-    </bean>
-
+    <import resource="loggers.xml"/>
 
     <import resource="others.xml"/>
 
